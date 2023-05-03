@@ -6,6 +6,7 @@ import { IconContext } from 'react-icons'
 import Button from 'react-bootstrap/Button'
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import FormComponent from './Form'
+import EditForm from './EditForm'
 
 export type Post = {
 	userId: number
@@ -16,6 +17,17 @@ export type Post = {
 
 export default function App() {
 	const [posts, setPosts] = useState<Post[]>([])
+	const [showEdit, setShowEdit] = useState<{
+		show: boolean
+		item: number
+		currentBody: string
+		currentTitle: string
+	}>({
+		show: false,
+		item: 1,
+		currentBody: '',
+		currentTitle: ''
+	})
 	const [page, setPage] = useState(0)
 	const [loading, setLoading] = useState(false)
 	const [filterData, setFilterData] = useState<Post[]>()
@@ -56,30 +68,6 @@ export default function App() {
 		})
 	}
 
-	function editPost(id: number) {
-		fetch(`https://jsonplaceholder.typicode.com/posts/${id}`, {
-			method: 'PUT',
-			body: JSON.stringify({
-				id: id,
-				title: 'foo',
-				body: 'bar',
-				userId: 1
-			}),
-			headers: {
-				'Content-type': 'application/json; charset=UTF-8'
-			}
-		})
-			.then((response) => response.json())
-			.then((json) => {
-				/* posts.splice(id, 1, json)
-				const newArray = posts
-				setPosts(newArray) */
-				console.log(json)
-			})
-	}
-
-	
-
 	return (
 		<main>
 			<div className='container'>
@@ -89,7 +77,23 @@ export default function App() {
 				>
 					Log Posts
 				</Button>
-				<FormComponent posts={posts} setPosts={setPosts}/>
+				<div className='formsContainer'>
+					<FormComponent
+						posts={posts}
+						setPosts={setPosts}
+					/>
+					{showEdit.show && (
+						<EditForm
+							posts={posts}
+							setPosts={setPosts}
+							id={showEdit.item}
+							currentBody={showEdit.currentBody}
+							currentTitle={showEdit.currentTitle}
+							showEdit={showEdit}
+							setShowEdit={setShowEdit}
+						/>
+					)}
+				</div>
 				<ul>
 					{loading ? (
 						<h2>Loading...</h2>
@@ -99,23 +103,32 @@ export default function App() {
 								key={key}
 								className='post'
 							>
-								<h4>
-									{item.id} - {item.title}{' '}
-									<Button
-										size='sm'
-										variant='danger'
-										onClick={() => deletePost(item.id)}
-									>
-										DEL
-									</Button>
-									<Button
-										onClick={() => editPost(item.id)}
-										size='sm'
-									>
-										EDIT
-									</Button>
-								</h4>
-								{item.body}
+								<div>
+									<h4>
+										{item.id} - {item.title}{' '}
+										<Button
+											size='sm'
+											variant='danger'
+											onClick={() => deletePost(item.id)}
+										>
+											DEL
+										</Button>
+										<Button
+											onClick={() =>
+												setShowEdit({
+													show: !showEdit.show,
+													item: item.id,
+													currentBody: item.body,
+													currentTitle: item.title
+												})
+											}
+											size='sm'
+										>
+											EDIT
+										</Button>
+									</h4>
+									{item.body}
+								</div>
 							</li>
 						))
 					)}
