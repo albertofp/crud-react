@@ -8,7 +8,7 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import FormComponent from './Form'
 
 export type Post = {
-	userid: number
+	userId: number
 	id: number
 	title: string
 	body: string
@@ -53,7 +53,6 @@ export default function App() {
 			method: 'DELETE'
 		}).then(() => {
 			setPosts(posts.filter((n) => n.id !== id)) // remove obj com id desejado
-			console.log(posts.length)
 		})
 	}
 
@@ -75,30 +74,11 @@ export default function App() {
 				/* posts.splice(id, 1, json)
 				const newArray = posts
 				setPosts(newArray) */
-        console.log(json)
-        
+				console.log(json)
 			})
 	}
 
-	function addPost(postTitle: string, postBody: string) {
-		fetch('https://jsonplaceholder.typicode.com/posts', {
-			method: 'POST',
-			body: JSON.stringify({
-        id:posts.length + 1,
-				title: postTitle,
-				body: postBody,
-				userId: 1
-			}),
-			headers: {
-				'Content-type': 'application/json; charset=UTF-8'
-			}
-		})
-			.then((response) => response.json())
-			.then((json) => {
-        posts.push(json)
-        setPosts(posts)
-      })
-	}
+	
 
 	return (
 		<main>
@@ -109,7 +89,7 @@ export default function App() {
 				>
 					Log Posts
 				</Button>
-				<FormComponent posts={posts} setPosts={setPosts} addPost={addPost}/>
+				<FormComponent posts={posts} setPosts={setPosts}/>
 				<ul>
 					{loading ? (
 						<h2>Loading...</h2>
