@@ -4,12 +4,19 @@ import ReactPaginate from 'react-paginate'
 import { AiFillLeftCircle, AiFillRightCircle } from "react-icons/ai"
 import { IconContext } from "react-icons"
 
+type Post = {
+  userid:number
+  id: number
+  title:string
+  body:string
+}
+
 export default function App() {
 
-  const [posts, setPosts] = useState([])
+  const [posts, setPosts] = useState<Post[]>([])
   const [page, setPage] = useState(0)
   const [loading, setLoading] = useState(false)
-  const [filterData, setFilterData] = useState()
+  const [filterData, setFilterData] = useState<Post[]>()
   const itemsPerPage = 3
 
   useEffect(() => {
@@ -22,7 +29,7 @@ export default function App() {
       .finally(() => {
         setFilterData(
           posts.filter((item, index) => {
-            return (index >= page * itemsPerPage) & (index < (page + 1) * itemsPerPage)
+            return (index >= page * itemsPerPage) && (index < (page + 1) * itemsPerPage)
           })
         )
         setLoading(false)
@@ -32,21 +39,21 @@ export default function App() {
   useEffect(() => {
     setFilterData(
       posts.filter((item, index) => {
-        return (index >= page * itemsPerPage) & (index < (page + 1) * itemsPerPage)
+        return (index >= page * itemsPerPage) && (index < (page + 1) * itemsPerPage)
       })
     )
   }, [page, posts])
 
-  function deletePost(id) {
+  function deletePost(id: number) {
     fetch(`https://jsonplaceholder.typicode.com/posts/${id}`, {
       method: 'DELETE',
     }).then(() => {
-      setPosts(posts.filter((n) => n !== id))
+      setPosts(posts.filter((n) => n.id !== id))
       console.log(posts.length)
     }) // remove obj com id desejado
   }
 
-  function editPost(id) {
+  function editPost(id:number) {
     fetch(`https://jsonplaceholder.typicode.com/posts/${id}`, {
       method: 'PUT',
       body: JSON.stringify({
@@ -63,7 +70,7 @@ export default function App() {
       .then((json) => console.log(json));
   }
 
-  function addPost(postTitle, postBody) {
+  function addPost(postTitle: string, postBody: string) {
     fetch('https://jsonplaceholder.typicode.com/posts', {
       method: 'POST',
       body: JSON.stringify({
