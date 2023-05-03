@@ -1,14 +1,18 @@
 #root {
-	height: 100dvh;
 	color: rgb(222, 221, 218);
 	background: rgb(53, 132, 228);
 	font-family: sans-serif;
 	margin: 0 auto;
 }
 
+html {
+  color: rgb(222, 221, 218);
+	background: rgb(53, 132, 228);
+	font-family: sans-serif;
+}
+
 main {
 	display: flex;
-	height: 100dvh;
 	font-family: sans-serif;
 	justify-content: center;
 	align-items: center;
