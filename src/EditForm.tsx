@@ -17,6 +17,9 @@ type FormProps = {
 	currentBody: string
 	showEdit: showEdit
 	setShowEdit: React.Dispatch<React.SetStateAction<showEdit>>
+	setFilterData: React.Dispatch<React.SetStateAction<Post[] | undefined>>
+    page:number 
+    itemsPerPage: number
 }
 
 export default function EditFormt({
@@ -26,7 +29,10 @@ export default function EditFormt({
 	currentTitle,
 	currentBody,
 	showEdit,
-	setShowEdit
+	setShowEdit,
+	setFilterData,
+	page,
+	itemsPerPage
 }: FormProps) {
 	const [validated, setValidated] = useState(false)
 	const [formValues, setFormValues] = useState<{ body: string; title: string }>(
@@ -73,6 +79,13 @@ export default function EditFormt({
 				const newArray = posts
 				console.log(posts)
 				setPosts(newArray)
+				setFilterData(
+					posts.filter((item, index) => {
+						return (
+							index >= page * itemsPerPage && index < (page + 1) * itemsPerPage
+						)
+					})
+				)
 
 				//Reset
 				setShowEdit({

@@ -68,6 +68,15 @@ export default function App() {
 		})
 	}
 
+	const handleEditClick = (item: Post) => {
+		setShowEdit({
+			show: !showEdit.show,
+			item: item.id,
+			currentBody: item.body,
+			currentTitle: item.title
+		})
+	}
+
 	return (
 		<main>
 			<div className='container'>
@@ -91,6 +100,9 @@ export default function App() {
 							currentTitle={showEdit.currentTitle}
 							showEdit={showEdit}
 							setShowEdit={setShowEdit}
+							setFilterData={setFilterData}
+							page={page}
+							itemsPerPage={itemsPerPage}
 						/>
 					)}
 				</div>
@@ -114,14 +126,7 @@ export default function App() {
 											DEL
 										</Button>
 										<Button
-											onClick={() =>
-												setShowEdit({
-													show: !showEdit.show,
-													item: item.id,
-													currentBody: item.body,
-													currentTitle: item.title
-												})
-											}
+											onClick={() => handleEditClick(item)}
 											size='sm'
 										>
 											EDIT
